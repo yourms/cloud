@@ -44,34 +44,18 @@
     <div class="container">
 
         <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block">
-                        <img src= "{%static 'img/FireFightAgent.jpg'%}" width="720" height="600"/>
-                    </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-8">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Agent Resister</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Resister</h1>
                             </div>
                             <form class="user" id="registerForm" action="/registerimpl" method="post" data-sb-form-api-token="API_TOKEN">
                                 {% csrf_token %}
                                 <div class="form-group">
-<!--                                    <div class="col-sm-6 mb-3 mb-sm-0">-->
-                                        <input type="text" class="form-control form-control-user" id="exampleName" name="name" minlength=3 required
-                                               placeholder="Name"></div>
-                                <div class="form-group">
-                                        <input type="text" class="form-control form-control-user" id="exampleId" name="id" minlength=3 required
-                                            placeholder="ID">
-<!--                                    </div>-->
-<!--                                    <div class="col-sm-6">-->
-<!--                                        <input type="text" class="form-control form-control-user" id="exampleLastName"-->
-<!--                                            placeholder="Last Name">-->
-<!--                                    </div>-->
+                                    <input type="text" class="form-control form-control-user" id="id" name="id" minlength=3 required
+                                        placeholder="ID">
                                 </div>
-
-
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user" name="password" minlength=3 required
@@ -81,20 +65,26 @@
                                         <input type="password" class="form-control form-control-user" name="passwordchk" minlength=3 required
                                             id="passwordchk" placeholder="Repeat Password">
                                     </div>
-                                    <div class="form-group">
+                                </div>
+                                <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="email" name="email" minlength=3 required
                                         placeholder="Email Address">
                                     </div>
-                                </div>
                                 <input class="btn btn-primary btn-user btn-block" id = "submit" type="submit" value="Register Account" style="font-weight : bold ;">
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" id="email" name="email" minlength=3 required
+                                        placeholder="Email Address">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" id="email" name="email" minlength=3 required
+                                        placeholder="Email Address">
+                                </div>
                             </form>
                             <div class="text-center">
                                 <a class="small" href="/login">Log In</a>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </div>
 
     </div>
