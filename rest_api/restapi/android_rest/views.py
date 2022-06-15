@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 
-from android_rest.models import User
-from android_rest.serializers import UserSerializer
+from android_rest.models import User, Product
+from android_rest.serializers import UserSerializer, ProductSerializer
 
 
 def lists(request):
@@ -24,3 +24,11 @@ def loginandroid(request):
             return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
         else:
             return JsonResponse("fail", safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def goodsAndorid(request):
+    if request.method == 'GET':
+        datalist = Product.objects.all()
+        serializer = ProductSerializer(datalist, many=True)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
