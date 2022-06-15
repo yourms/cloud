@@ -3,7 +3,7 @@ from django.db import models
 
 class Grade(models.Model):
     gno = models.AutoField(primary_key=True)
-    grade = models.IntegerField(max_length=10, blank=True)
+    grade = models.IntegerField(blank=True)
 
     class Meta:
         db_table = 'grade'
@@ -24,7 +24,16 @@ class User(models.Model):
 
 class Product(models.Model):
     pno = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=10, blank=False)
+    id = models.IntegerField(max_length=10, blank=False)
+    main = models.CharField(max_length=10, blank=False)
+    sub1 = models.CharField(max_length=10, blank=False)
+    sub2 = models.CharField(max_length=20, blank=False)
+    specific = models.CharField(max_length=20, blank=False)
+    quantity = models.CharField(max_length=10, blank=False)
+    price = models.IntegerField(blank=False)
+    section = models.CharField(max_length=20, blank=False)
+    location = models.CharField(max_length=20, blank=False)
+    stock = models.CharField(max_length=20, blank=False)
 
     class Meta:
         db_table = 'product'
