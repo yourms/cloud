@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django_request_mapping import request_mapping
-from android_rest.models import *
+from helpweb.models import *
 from django.views import View
 
 # Create your views here.
@@ -33,7 +33,7 @@ class MyView(View):
         id = request.POST["id"]
         password = request.POST["password"]
         try:
-            mgr = User.objects.get(id=id)
+            mgr = Manager.objects.get(id=id)
             if mgr.mgr_pass == password:
                 request.session["sessionid"] = mgr.webid
                 # context = {'obj':mgr}
@@ -46,7 +46,7 @@ class MyView(View):
     @request_mapping("/index", method="get")
     def index(self, request):
         try:
-            mgr = User.objects.get(id=request.session["sessionid"])
+            mgr = Manager.objects.get(id=request.session["sessionid"])
             context = {'obj': mgr}
             return render(request, 'index.html', context)
         except:
@@ -73,16 +73,17 @@ class MyView(View):
         password = request.POST["password"]
         passwordchk = request.POST["passwordchk"]
         email = request.POST["email"]
-        phone = request.POST["phone"]
+        phone1 = request.POST["phone1"]
+        phone2 = request.POST["phone2"]
+        phone3 = request.POST["phone3"]
         address = request.POST["address"]
-        gno = request.POST["gno"]
 
         try:
-            User.objects.get(id=id)
+            Manager.objects.get(id=id)
             return render(request, 'registerfail.html')
         except:
             if password == passwordchk:
-                User(id=id, password=password, email=email, phone=phone, address=address, gno=gno).save();
+                Manager(idweb=id, passwordweb=password, emailweb=email, phoneweb=phone1+phone2+phone3, addressweb=address).save();
                 request.session['sessionid'] = id;
                 return redirect('/')
             else:
