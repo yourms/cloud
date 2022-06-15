@@ -34,7 +34,7 @@ class MyView(View):
         password = request.POST["password"]
         try:
             mgr = Manager.objects.get(id=id)
-            if mgr.mgr_pass == password:
+            if mgr.password == password:
                 request.session["sessionid"] = mgr.webid
                 # context = {'obj':mgr}
                 return redirect("/index")
@@ -46,9 +46,8 @@ class MyView(View):
     @request_mapping("/index", method="get")
     def index(self, request):
         try:
-            mgr = Manager.objects.get(id=request.session["sessionid"])
-            context = {'obj': mgr}
-            return render(request, 'index.html', context)
+            if request.session['sessionid'] != None:
+                return render(request, 'index.html')
         except:
             return render(request, 'accessfail.html')
 
