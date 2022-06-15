@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 
 from android_rest.models import User, Product
-from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer
+from android_rest.serializers import UserSerializer, ProductSerializer
 
 
 def lists(request):
@@ -36,9 +36,9 @@ def goodsAndorid(request):
 def searchProduct(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["name"]
-        print(productName)
-        objs = Product.objects.filter(name__icontains=productName).values('name')
-        serializer = SearchSerializer(objs, many=True)
-        print(serializer.data)
-        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
+        name = data["name"]
+        print(name)
+        objs = Product.objects.get(name__icontains=name)
+        serailzer = ProductSerializer(objs, many=True)
+        
+        return JsonResponse(serailzer.data, safe=False, json_dumps_params={'ensure_ascii': False})
