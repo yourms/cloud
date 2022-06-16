@@ -10,7 +10,7 @@ urlpatterns = [
     path('goodsandorid', goodsAndorid, name="goodsandroid"),
     path('searchProduct', searchProduct, name="searchProduct"),
     path('searchcount', searchProductCount),
-    path('infoproduct',infoproduct,name="infoproduct")
+    path('infoproduct',infoproduct,name="infoproduct"),
 
 ]
 
