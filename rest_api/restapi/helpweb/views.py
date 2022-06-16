@@ -30,12 +30,12 @@ class MyView(View):
 
     @request_mapping("/loginimpl", method="post")
     def loginimpl(self, request):
-        id = request.POST["id"]
-        password = request.POST["password"]
+        idweb = request.POST["id"]
+        passwordweb = request.POST["password"]
         try:
-            mgr = Manager.objects.get(id=id)
-            if mgr.password == password:
-                request.session["sessionid"] = mgr.webid
+            mgr = Manager.objects.get(idweb=idweb)
+            if mgr.passwordweb == passwordweb:
+                request.session["sessionid"] = mgr.idweb
                 # context = {'obj':mgr}
                 return redirect("/index")
             else:
