@@ -49,18 +49,18 @@ class MyView(View):
             if request.session['sessionid'] != None:
                 return render(request, 'homepage.html')
         except:
-            return render(request, 'accessfail.html')
+            return render(request, 'login.html')
 
     @request_mapping("/logout", method="get")
     def logout(self, request):
         try:
             if request.session['sessionid'] != None:
                 del request.session['sessionid']
-                return redirect('/')
+                return redirect('/login')
             else:
                 pass
         except:
-            return redirect('/')
+            return redirect('/login')
 
     @request_mapping("/register", method="get")
     def register(self, request):
@@ -87,3 +87,11 @@ class MyView(View):
                 return redirect('/')
             else:
                 return render(request, 'registerfail.html')
+
+    @request_mapping("/write", method="get")
+    def write(self, request):
+        try:
+            if request.session['sessionid'] != None:
+                return render(request, 'write.html')
+        except:
+            return render(request, 'accessfail.html')
