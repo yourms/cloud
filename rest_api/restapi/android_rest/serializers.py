@@ -21,3 +21,7 @@ class SearchSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['name']
 
+class ProductlistSerial(serializers.ModelSerializer):
+    class Meta:
+        model=Product
+        fields=['name','price','location']

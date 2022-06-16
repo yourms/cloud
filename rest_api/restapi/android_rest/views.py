@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 
 from android_rest.models import User, Product
-from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer
+from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer, ProductlistSerial
 
 
 def lists(request):
@@ -42,3 +42,9 @@ def searchProduct(request):
         serializer = SearchSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
+
+def infoproduct(request):
+    if request.method == 'GET':
+        datalist = Product.objects.all()
+        serializer = ProductlistSerial(datalist, many=True)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
