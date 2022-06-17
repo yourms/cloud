@@ -51,6 +51,14 @@ class MyView(View):
         except:
             return render(request, 'login.html')
 
+    @request_mapping("/testpage", method="get")
+    def testpage(self, request):
+        try:
+            if request.session['sessionid'] != None:
+                return render(request, 'testpage.html')
+        except:
+            return render(request, 'login.html')
+
     @request_mapping("/logout", method="get")
     def logout(self, request):
         try:
@@ -88,10 +96,23 @@ class MyView(View):
             else:
                 return render(request, 'registerfail.html')
 
-    @request_mapping("/write", method="get")
-    def write(self, request):
+    @request_mapping("/notepad", method="get")
+    def notepad(self, request):
         try:
             if request.session['sessionid'] != None:
-                return render(request, 'write.html')
+                return render(request, 'notepad.html')
         except:
+            return render(request, 'login.html')
+
+    @request_mapping("/notewriteimpl", method="post")
+    def notewriteimpl(self, request):
+        id = request.session["sessionid"]
+        if id != None:
+            writer = Manager.objects.get(id=id)
+            info1 = request.POST["info1"]
+            info2 = request.POST["info2"]
+            info3 = request.POST["info3"]
+            notepadmdl(writer=writer, info1=info1, info2=info2, info3=info3).save()
+            return redirect('/homepage')
+        else:
             return render(request, 'accessfail.html')
