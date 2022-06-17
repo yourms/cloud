@@ -37,17 +37,17 @@ class MyView(View):
             if mgr.passwordweb == passwordweb:
                 request.session["sessionid"] = mgr.idweb
                 # context = {'obj':mgr}
-                return redirect("/index")
+                return redirect("/homepage")
             else:
                 return render(request, 'loginfail.html')
         except:
             return render(request, 'loginfail.html')
 
-    @request_mapping("/index", method="get")
-    def index(self, request):
+    @request_mapping("/homepage", method="get")
+    def homepage(self, request):
         try:
             if request.session['sessionid'] != None:
-                return render(request, 'index.html')
+                return render(request, 'homepage.html')
         except:
             return render(request, 'accessfail.html')
 

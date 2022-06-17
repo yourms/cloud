@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>BIAC(BigData, IOT, AI, Cloud)</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      #first {
+			display:inline-block;
+			width:60%;
+			height:600px;
+			float: left;
+			position: relative;
+			left: 0%;
+			overflow-y: auto;
+		}
+		#second {
+			display:inline-block;
+			width: 40%;
+			float: left;
+			position: relative;
+			left: 0px;
+		}
+    </style>
+
+
+    <!-- Custom styles for this template -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+  </head>
+  <body class="d-flex h-100 text-center text-white bg-dark">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <h3 class="float-md-start mb-0">BIAC</h3>
+      <nav class="nav nav-masthead justify-content-center float-md-end">
+        <a class="nav-link active" aria-current="page" href="../../homepage">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="px-3">
+    <div id="first" style="" >
+		<div style="text-align-last: center;">
+			<h4>Mart Position</h4>
+		</div>
+		<table id="mart_map" class="table table-bordered" style="width:80%;">
+			<caption  style = "display:none;">이건테이블이다1.</caption>
+			<tbody id="mart_map_tbody" stype="height:600px; width:600px">
+				{% for row in rows %}
+
+				<tr id="tr_{{row}}" trCode="{{row}}" style='text-align: center;'>
+					{% for col in cols %}
+                    <td name="td_{{row}}_{{col}}" id="td_{{row}}_{{col}}" td_type="way" style="color:black;background-color:white;vertical-align: bottom;text-align: right;font-size: smaller;">{{row}}_{{col}}</td>
+                    {% endfor %}
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
+        <div id="two" style="width:80%;" >
+            <div style="text-align-last: center;">
+                <div id="route_button"></div>
+            </div>
+        </div>
+        <div id="third" style="width:80%;margin-top: 10px;" >
+            <div style="text-align-last: center;">
+                <button type="button" style="color:black;background-color:white" onclick="play_click();">한칸씩</button>
+                <button type="button" style="color:black;background-color:white" onclick="only_one_play_click();">한칸만</button>
+                <button type="button" style="color:black;background-color:white" onclick="clear_play();">clear</button>
+
+            </div>
+        </div>
+	</div>
+    <div id="second" style="height: 300px;" >
+		<div style="text-align-last: left;">
+			<h4>Mart Position</h4>
+		</div>
+        <div>
+            <img id="camera_img" src=""/>
+        </div>
+    </div>
+<!--    <div id="second" style="height: 300px;" >-->
+<!--		<div style="text-align-last: left;">-->
+<!--			<h4>Mart Position</h4>-->
+<!--		</div>-->
+<!--        <table id="mart_route" class="table table-bordered" style="width:50%;overflow-y: auto;">-->
+<!--			<caption  style = "display:none;">이건테이블이다2.</caption>-->
+<!--			<tbody id="mart_route_tbody" stype="height:600px; width:300px;">-->
+<!--				{% for row in routes %}-->
+<!--				<tr id="tr_route_{{row}}" style='text-align: center;' >-->
+<!--                    <td name="td_route_{{row}}" id="td_route_{{row}}" td_value="" style="color:black;background-color:white;" onclick="paint_tr_click(this);">{{row}}</td>-->
+<!--                </tr>-->
+<!--				{% endfor %}-->
+<!--			</tbody>-->
+
+<!--		</table>-->
+<!--    </div>-->
+
+  </main>
+
+  <footer class="mt-auto text-white-50">
+    <p>BIAC(BigData, IOT, AI, Cloud)</p>
+  </footer>
+</div>
+<script>
+    var route_list_arr = new Array();
+    var route_long_arr = new Array();
+    var interval_id
+</script>
+<script>
+
+    function updateMap(){  // 맵 세팅
+        console.log('updateMap');
+        $.ajax({
+            url: '../updateMap/',
+            type : 'POST',
+            data : {'csrfmiddlewaretoken' : '{{csrf_token}}',
+                    typeMap : 'update'},
+            dataType : 'json',
+            success: function(obj){
+                //alert(obj);
+                //console.log(obj['map']);
+                var map = JSON.parse(obj["map"]);
+                $.each(map, function(idx, data){
+                    //console.log(idx);
+
+                    if(data.fields.type == "stand"){ // stand 위치의 셀 td_type, color 지정
+                        var row = data.fields.row;
+                        var col = data.fields.col;
+                        //console.log(data.fields.row, data.fields.col);
+                        $('#td_'+row+'_'+col).attr("td_type", "stand")
+                        $('#td_'+row+'_'+col).css("background-color","#FF9966");
+                        //$('#td_A_2').css("background-color","blue");
+                    }
+                });
+                console.log(obj['route_list']);
+                $.each(obj['route_list'], function(idx, data){ // 상품위치(정지해야할 곳)셀 td_type, color 지정
+                    $('#td_'+data).attr("td_type", "route")
+                    $('#td_'+data).css("background-color","#66FF99");
+                });
+                var hover_init = true;
+                $.each(obj['route'], function(idx, data){  // 오른쪽 테이블에 경로 표시
+                    //$('#td_'+data).css("background-color","#66FF99");
+                    //$('#td_route_'+idx).text(data);
+                    //$('#td_route_'+idx).attr('td_value',data);
+
+                    var idx_1 = idx + 1;
+                    var txt_data = data;
+                    txt_data = txt_data;
+                    var txt = '<button id="btn_hover_'+idx+'" type="button" btn_val="'+data+'" style="color:black;background-color:white" onmouseover="btn_hover(this)" onmouseleave="btn_leave(this)">'+idx_1+'</button>';
+                    if(hover_init){
+                        $('#route_button').after(txt);
+                        hover_init = false;
+                    }else{
+                        $('#btn_hover_'+(idx - 1 )).after(txt);
+                    }
+
+
+
+                    // 리스트에 추가
+                    route_list_arr.push(data);
+                    // route_str 만듬
+                    if(route_long_arr[route_long_arr.length -1] == data[0]){
+                        data.shift();
+                    }
+                    route_long_arr = route_long_arr.concat(data);
+
+
+                });
+                console.log("route_list_arry : ", route_list_arr);
+                console.log("route_long_arr : ", route_long_arr);
+
+                $.each(obj['camera_url'], function(idx, data){
+                    console.log("data : ", data);
+                    $('#camera_img').attr("src", data);
+                });
+
+
+            },
+            error:function(request, error){
+                alert("fail");
+            }
+		});
+		//timerID = setTimeout("updateMap()", 5000); // 5초 단위로 갱신 처리
+    }
+    function paint_tr_click(obj){ // 우측 리스트 클릭했을때 좌측에 표시
+
+        paint_list = $('#'+obj.id).text().split(","); // 클릭한 스트링을 리스트로
+        paint_white_way();
+
+        paint_list.forEach(function(item) { // 색칠해야할 리스트에(way) 핑크로 변경
+            td_type = $('#td_'+item).attr("td_type");
+            if(td_type != "route"){                           // 정지해야할 route 는 제외하여 바탕색 변경
+                $('#td_'+item).css("background-color","pink");
+            }
+        });
+    }
+    function play_click(){ // 플레이버튼 클릭
+        clearInterval(interval_id);
+        paint_white_way();
+        i = 0;
+        interval_id = setInterval(function() {
+            td_type = $('#td_'+route_long_arr[i]).attr("td_type");
+            if(td_type != "route"){
+                $('#td_'+route_long_arr[i]).css("background-color","#78A9ED");
+            }
+            i += 1;
+            if(i > route_long_arr.length){clearInterval(interval_id);}
+        }, 200);
+        console.log("play_click");
+    }
+    function only_one_play_click(){ // 플레이버튼 클릭
+
+        clearInterval(interval_id);
+        i = 0;
+        interval_id = setInterval(function() {
+            paint_white_way();
+            td_type = $('#td_'+route_long_arr[i]).attr("td_type");
+            if(td_type != "route"){
+
+                $('#td_'+route_long_arr[i]).css("background-color","#78A9ED");
+            }
+            i += 1;
+            if(i > route_long_arr.length){clearInterval(interval_id);}
+        }, 200);
+    }
+
+    function clear_play(){ // clear 클릭
+        clearInterval(interval_id);
+        paint_white_way();
+    }
+
+    function paint_white_way(){
+        console.log("paint_white_way");
+        mart_map_tbody = $('#mart_map_tbody td');
+        //console.log("mart_map_tbody.length : ", mart_map_tbody.length);
+        for (var i = 0; i < mart_map_tbody.length; i++){ // 색칠하기전에 td_type이 way 인 셀 하얀색으로 변경
+            td_type = $('#'+mart_map_tbody[i].id).attr("td_type");
+            //console.log("td_type : ", td_type);
+            if(td_type == "way"){
+                $('#'+mart_map_tbody[i].id).css("background-color","white");
+            }
+        }
+    }
+
+    function btn_hover(data){
+
+        console.log("data : ", data);
+        paint_list = $('#'+data.id).attr("btn_val").split(","); // 클릭한 스트링을 리스트로
+        paint_white_way();
+
+        paint_list.forEach(function(item) { // 색칠해야할 리스트에(way) 핑크로 변경
+            td_type = $('#td_'+item).attr("td_type");
+            if(td_type != "route"){                           // 정지해야할 route 는 제외하여 바탕색 변경
+                $('#td_'+item).css("background-color","pink");
+            }
+        });
+    }
+    function btn_leave(data){
+        paint_white_way();
+    }
+
+
+
+
+
+</script>
+<script>
+    $(document).ready(function(){
+        updateMap();
+
+    });
+</script>
+
+
+  </body>
+</html>
