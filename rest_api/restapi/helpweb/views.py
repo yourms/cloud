@@ -49,18 +49,26 @@ class MyView(View):
             if request.session['sessionid'] != None:
                 return render(request, 'homepage.html')
         except:
-            return render(request, 'accessfail.html')
+            return render(request, 'login.html')
+
+    @request_mapping("/testpage", method="get")
+    def testpage(self, request):
+        try:
+            if request.session['sessionid'] != None:
+                return render(request, 'testpage.html')
+        except:
+            return render(request, 'login.html')
 
     @request_mapping("/logout", method="get")
     def logout(self, request):
         try:
             if request.session['sessionid'] != None:
                 del request.session['sessionid']
-                return redirect('/')
+                return redirect('/login')
             else:
                 pass
         except:
-            return redirect('/')
+            return redirect('/login')
 
     @request_mapping("/register", method="get")
     def register(self, request):
@@ -87,3 +95,24 @@ class MyView(View):
                 return redirect('/')
             else:
                 return render(request, 'registerfail.html')
+
+    @request_mapping("/notepad", method="get")
+    def notepad(self, request):
+        try:
+            if request.session['sessionid'] != None:
+                return render(request, 'notepad.html')
+        except:
+            return render(request, 'login.html')
+
+    @request_mapping("/notewriteimpl", method="post")
+    def notewriteimpl(self, request):
+        id = request.session["sessionid"]
+        if id != None:
+            writer = Manager.objects.get(id=id)
+            info1 = request.POST["info1"]
+            info2 = request.POST["info2"]
+            info3 = request.POST["info3"]
+            notepadmdl(writer=writer, info1=info1, info2=info2, info3=info3).save()
+            return redirect('/homepage')
+        else:
+            return render(request, 'accessfail.html')

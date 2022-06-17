@@ -11,3 +11,10 @@ class Manager(models.Model):
 
     class Meta:
         db_table = 'manager'
+
+class notepadmdl(models.Model):
+    noteno = models.IntegerField(primary_key=True, auto_created=True)
+    writer = models.CharField(max_length=100, blank=False)
+    info1 = models.CharField(max_length=200)
+    info2 = models.CharField(max_length=200)
+    info3 = models.CharField(max_length=200)
