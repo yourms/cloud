@@ -56,7 +56,7 @@ def searchProductCount(request):
 
 def infoproduct(request):
     if request.method == 'GET':
-        datalist = Product.objects.all()
+        datalist = Product.objects.distinct().all()
         serializer = ProductSerializer(datalist, many=True)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
 
