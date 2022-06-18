@@ -14,7 +14,7 @@ class User(models.Model):
     id = models.CharField(max_length=10, blank=False)
     password = models.CharField(max_length=10, blank=False)
     email = models.CharField(max_length=20, blank=False)
-    phone = models.CharField(max_length=10, blank=False)
+    phone = models.CharField(max_length=11, blank=False)
     address = models.CharField(max_length=100, blank=False)
     gno = models.ForeignKey('Grade', models.DO_NOTHING, db_column='gno', blank=False, null=False)
 
