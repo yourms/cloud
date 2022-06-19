@@ -1,3 +1,17 @@
+//let snack = $("snack").attr('value');
+//let desert = $("desert").attr('value');
+//let noodles = $("noodles").attr('value');
+//let unclassion = $("unclassion").attr('value');
+//let room_temperature_hmr = $("room_temperature_hmr").attr('value');
+//let household_goods = $("household_goods").attr('value');
+//let lee_beauty = $("lee_beauty").attr('value');
+//let sauce = $("sauce").attr('value');
+//let dairy_product = $("dairy_product").attr('value');
+//let beverage = $("beverage").attr('value');
+//let coffee = $("coffee").attr('value');
+//let canned_snacks = $("canned_snacks").attr('value');
+//let home_clean = $("home_clean").attr('value');
+//alert(snack)
 function display(data){
         Highcharts.chart('container', {
             chart: {
