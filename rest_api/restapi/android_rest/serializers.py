@@ -6,7 +6,7 @@ from android_rest.models import User, Product
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'password', 'email', 'phone', 'address', 'gno']
+        fields = ['id', 'password', 'name', 'email', 'phone', 'address', 'gno', 'regdate']
 
 
 class ProductSerializer(serializers.ModelSerializer):
