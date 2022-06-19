@@ -121,7 +121,7 @@
                     aria-expanded="true" aria-controls="collapsePages">
                     <span>Logout</span>
                 </a>
-                <a class="nav-link collapsed" href="/userinfo" data-toggle="collapse" data-target="#collapsePages"
+                <a class="nav-link collapsed" href="/view" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <span>회원 정보 조회</span>
                 </a>
@@ -152,7 +152,7 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <h2 >{{id}}님 안녕하세요 오늘도 행복한 하루 되세요  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
+                    <h2 > 오늘도 행복한 하루되세요 &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2>
                     <h3 id="sysdate" > 현재 시간 : </h3>
                 </nav>
                 <!-- End of Topbar -->
@@ -168,30 +168,78 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">상품 통계</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">등록 계정</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <p>snack : {{snack}}</p>
-                                    <p>desert : {{desert}}</p>
-                                    <p>noodles: {{noodles}}</p>
-                                    <p>unclassion: {{unclassion}}</p>
-                                    <p>room_temperature_hmr: {{room_temperature_hmr}}</p>
-                                    <p>household_goods: {{household_goods}}</p>
-                                    <p>lee_beauty: {{lee_beauty}}</p>
-                                    <p>sauce: {{sauce}}</p>
-                                    <p>dairy_product: {{dairy_product}}</p>
-                                    <p>beverage: {{dairy_product}}</p>
-                                    <p>coffee: {{coffee}}</p>
-                                    <p>canned_snacks: {{canned_snacks}}</p>
-                                    <p>home_clean: {{home_clean}}</p>
-
-                                    <div id="container"></div>
-                                </div>
+                                                                <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTables" width="50%">
+                                    <thead>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이메일</th>
+                                            <th>핸드폰</th>
+                                            <th>장애등급</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if name_list %}
+                                        {% for name in name_list %}
+                                            <tr>
+                                                <td>{{name.id}}</td>
+                                                <td>{{name.name}}</td>
+                                                <td>{{name.phone}}</td>
+                                                <td>{{name.gno.grade}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="8">No Data.</td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <ul class="pagination justify-content-center">
+                                    <!-- 이전페이지 -->
+                                    {% if name_list.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ name_list.previous_page_number }}">이전</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                                    </li>
+                                    {% endif %}
+                                    <!-- 페이지리스트 -->
+                                    {% for page_number in name_list.paginator.page_range %}
+                                    {% if page_number >= name_list.number|add:-3 and page_number <= name_list.number|add:3 %}
+                                    {% if page_number == name_list.number %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    <!-- 다음페이지 -->
+                                    {% if name_list.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+        </div>
 
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
@@ -199,13 +247,15 @@
                     <!-- Card Header - Dropdown -->
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">이동 페이지</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">현황 정보</h6>
                     </div>
                     <!-- Card Body -->
                         <div class="card-body">
-                            <a href="/notepad">일지 작성 &nbsp &nbsp &nbsp</a>
-                            <a href=""> 사용자 리스트 &nbsp &nbsp &nbsp</a>
-                            <a href="/">상품 정보 수정 &nbsp &nbsp &nbsp</a>
+                            <p id="clock">clock</p>
+                            <p id="today"></p>
+                            <h2>{{obj.name}}</h2>
+                            <p id="fire_count">{{obj.rno.rankdata}}</p>
+                            <a href="/notepad">일지 작성</a>
                         </div>
                     </div>
                     </div>
@@ -289,6 +339,8 @@
             </div>
         </div>
                 <!-- /.container-fluid -->
+
+    </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -334,9 +386,29 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
-    <script src="http://code.highcharts.com/stock/highstock.js"></script>
-    <script src="{% static 'js/charts.js' %}"></script>
-    <script src="{% static 'js/sysdate.js' %}"></script>
+
+<script>
+    var Target = document.getElementById("sysdate");
+    function clock() {
+        var time = new Date();
+
+        var month = time.getMonth();
+        var date = time.getDate();
+        var day = time.getDay();
+        var week = ['일', '월', '화', '수', '목', '금', '토'];
+
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+
+        Target.innerText =
+        `${month + 1}월 ${date}일 ${week[day]}요일 ` +
+        `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+    }
+    clock();
+    setInterval(clock, 1000); // 1초마다 실행
+</script>
 </body>
 
 </html>
