@@ -59,9 +59,14 @@
             console.log(data);
             str='<table>';
             str+='<tr>'+'<td>'+"&nbsp;&nbsp;&nbsp;&nbsp;상 품 명"+'</td>'+'<td>'+"상품 가격"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'
-            +'<td>'+"상품 위치"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"상품 번호"+'</td>'+'</tr>';
+            +'<td>'+"상품 위치"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"상품 번호"+'</td>'
+            +'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"소분류"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"대분류"+'</td>'
+            +'</tr>';
                 $.each(data,function(i){
-                    str+='<tr>'+'<td>'+data[i].name+'</td>'+'<td>'+data[i].price+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+data[i].location+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+data[i].pno+'</td>'+'</tr>';
+                    str+='<tr>'+'<td>'+data[i].name+'</td>'+'<td>'+data[i].price+'</td>'+'<td>'+""+'</td>'
+                    +'<td>'+data[i].location+'</td>'+'<td>'+""+'</td>'+'<td>'+data[i].pno+'</td>'
+                    +'<td>'+""+'</td>'+'<td>'+data[i].sub1+'</td>'+'<td>'+""+'</td>'+'<td>'+data[i].main+'</td>'
+                    +'</tr>';
                 });
             $("#infoproducttarget").append(str);
             },
