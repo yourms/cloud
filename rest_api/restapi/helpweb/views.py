@@ -57,24 +57,25 @@ class MyView(View):
                 paginator = Paginator(datalist, 30)
                 page_obj = paginator.get_page(page)
                 all_product = Product.objects.filter().count()
-                snack = Product.objects.filter(main='과자').count() / all_product * 100
-                desert = Product.objects.filter(main='디저트').count() / all_product * 100
-                noodles = Product.objects.filter(main='면류').count() / all_product * 100
-                unclassion = Product.objects.filter(main='미분류').count() / all_product * 100
-                room_temperature_hmr = Product.objects.filter(main='상온HMR').count() / all_product * 100
-                household_goods = Product.objects.filter(main='생활용품').count() / all_product * 100
-                lee_beauty = Product.objects.filter(main='이/미용').count() / all_product * 100
-                sauce = Product.objects.filter(main='소스').count() / all_product * 100
-                dairy_product = Product.objects.filter(main='유제품').count() / all_product * 100
-                beverage = Product.objects.filter(main='음료').count() / all_product * 100
-                coffee = Product.objects.filter(main='커피차').count() / all_product * 100
-                canned_snacks = Product.objects.filter(main='통조림/안주').count() / all_product * 100
-                home_clean = Product.objects.filter(main='홈클린').count() / all_product * 100
+                snack = Product.objects.filter(main='과자').count()
+                desert = Product.objects.filter(main='디저트').count()
+                noodles = Product.objects.filter(main='면류').count()
+                unclassion = Product.objects.filter(main='미분류').count()
+                room_temperature_hmr = Product.objects.filter(main='상온HMR').count()
+                household_goods = Product.objects.filter(main='생활용품').count()
+                lee_beauty = Product.objects.filter(main='이/미용').count()
+                sauce = Product.objects.filter(main='소스').count()
+                dairy_product = Product.objects.filter(main='유제품').count()
+                beverage = Product.objects.filter(main='음료').count()
+                coffee = Product.objects.filter(main='커피차').count()
+                canned_snacks = Product.objects.filter(main='통조림/안주').count()
+                home_clean = Product.objects.filter(main='홈클린').count()
                 context = {
                     'id': id,
                     'boards': page_obj,
                     'question_list': page_obj,
                     'page': page,
+                    'all_product': all_product,
                     'snack': snack,
                     'desert': desert,
                     'noodles': noodles,
