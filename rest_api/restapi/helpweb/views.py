@@ -2,10 +2,10 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django_request_mapping import request_mapping
-
 from android_rest.models import Product, User
 from helpweb.models import *
 from django.views import View
+
 
 # Create your views here.
 
@@ -13,19 +13,19 @@ from django.views import View
 class MyView(View):
 
     @request_mapping("/", method="get")
-    def home(self,request):
+    def home(self, request):
         try:
-            if request.session['sessionid'] !=None:
-                return render(request,'alreadylogin.html')
+            if request.session['sessionid'] is not None:
+                return render(request, 'alreadylogin.html')
             else:
                 pass
         except:
-            return render(request,'login.html')
+            return render(request, 'login.html')
 
     @request_mapping("/login", method="get")
     def login(self, request):
         try:
-            if request.session['sessionid'] != None:
+            if request.session['sessionid'] is not None:
                 return render(request, 'alreadylogin.html')
             else:
                 pass
@@ -51,29 +51,65 @@ class MyView(View):
     def homepage(self, request):
         try:
             if request.session['sessionid'] is not None:
+                id = request.session["sessionid"]
                 datalist = Product.objects.distinct().all()
                 page = request.GET.get('page', '1')
                 paginator = Paginator(datalist, 30)
                 page_obj = paginator.get_page(page)
-                datalists = User.objects.distinct().all()
-                pages = request.GET.get('page', '1')
-                paginators = Paginator(datalists, 10)
-                page_objs = paginators.get_page(pages)
+                all_product = Product.objects.filter().count()
+                snack = Product.objects.filter(main='과자').count() / all_product * 100
+                desert = Product.objects.filter(main='디저트').count() / all_product * 100
+                noodles = Product.objects.filter(main='면류').count() / all_product * 100
+                unclassion = Product.objects.filter(main='미분류').count() / all_product * 100
+                room_temperature_hmr = Product.objects.filter(main='상온HMR').count() / all_product * 100
+                household_goods = Product.objects.filter(main='생활용품').count() / all_product * 100
+                lee_beauty = Product.objects.filter(main='이/미용').count() / all_product * 100
+                sauce = Product.objects.filter(main='소스').count() / all_product * 100
+                dairy_product = Product.objects.filter(main='유제품').count() / all_product * 100
+                beverage = Product.objects.filter(main='음료').count() / all_product * 100
+                coffee = Product.objects.filter(main='커피차').count() / all_product * 100
+                canned_snacks = Product.objects.filter(main='통조림/안주').count() / all_product * 100
+                home_clean = Product.objects.filter(main='홈클린').count() / all_product * 100
                 context = {
+                    'id': id,
                     'boards': page_obj,
                     'question_list': page_obj,
                     'page': page,
-                    'name': page_objs,
-                    'name_list': page_objs,
-                    'name_page': pages}
+                    'snack': snack,
+                    'desert': desert,
+                    'noodles': noodles,
+                    'unclassion': unclassion,
+                    'room_temperature_hmr': room_temperature_hmr,
+                    'household_goods': household_goods,
+                    'lee_beauty': lee_beauty,
+                    'sauce': sauce,
+                    'dairy_product': dairy_product,
+                    'beverage': beverage,
+                    'coffee': coffee,
+                    'canned_snacks': canned_snacks,
+                    'home_clean': home_clean
+                }
                 return render(request, 'homepage.html', context)
         except:
             return render(request, "loginfail.html")
 
+    @request_mapping("/userinfo", method="get")
+    def userinfo(self, request):
+        datalists = User.objects.distinct().all()
+        pages = request.GET.get('page', '1')
+        paginators = Paginator(datalists, 10)
+        page_objs = paginators.get_page(pages)
+        context = {
+            'name': page_objs,
+            'name_list': page_objs,
+            'name_page': pages,
+        }
+        return render(request, 'homepage.html', context)
+
     @request_mapping("/search", method="get")
     def search(self, request):
         datalist = Product.objects.distinct().all()
-        search = request.GET.get('search','')
+        search = request.GET.get('search', '')
         if search:
             search_list = datalist.filter(
                 Q(name_icontans=search) |
@@ -91,7 +127,7 @@ class MyView(View):
     @request_mapping("/testpage", method="get")
     def testpage(self, request):
         try:
-            if request.session['sessionid'] != None:
+            if request.session['sessionid'] is not None:
                 return render(request, 'testpage.html')
         except:
             return render(request, 'login.html')
@@ -99,7 +135,7 @@ class MyView(View):
     @request_mapping("/logout", method="get")
     def logout(self, request):
         try:
-            if request.session['sessionid'] != None:
+            if request.session['sessionid'] is not None:
                 del request.session['sessionid']
                 return redirect('/login')
             else:
@@ -127,8 +163,9 @@ class MyView(View):
             return render(request, 'registerfail.html')
         except:
             if password == passwordchk:
-                Manager(idweb=id, passwordweb=password, emailweb=email, phoneweb=phone1+phone2+phone3, addressweb=address).save();
-                request.session['sessionid'] = id;
+                Manager(idweb=id, passwordweb=password, emailweb=email, phoneweb=phone1 + phone2 + phone3,
+                        addressweb=address).save()
+                request.session['sessionid'] = id
                 return redirect('/')
             else:
                 return render(request, 'registerfail.html')
@@ -136,7 +173,7 @@ class MyView(View):
     @request_mapping("/notepad", method="get")
     def notepad(self, request):
         try:
-            if request.session['sessionid'] != None:
+            if request.session['sessionid'] is not None:
                 return render(request, 'notepad.html')
         except:
             return render(request, 'login.html')
@@ -144,12 +181,12 @@ class MyView(View):
     @request_mapping("/notewriteimpl", method="post")
     def notewriteimpl(self, request):
         id = request.session["sessionid"]
-        if id != None:
+        if id is not None:
             writer = Manager.objects.get(id=id)
             info1 = request.POST["info1"]
             info2 = request.POST["info2"]
             info3 = request.POST["info3"]
-            notepadmdl(writer=writer, info1=info1, info2=info2, info3=info3).save()
+            Notepadmdl(writer=writer, info1=info1, info2=info2, info3=info3).save()
             return redirect('/homepage')
         else:
             return render(request, 'accessfail.html')
