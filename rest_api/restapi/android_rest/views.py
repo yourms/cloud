@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
-
-from android_rest.models import User, Product
+from android_rest.models import User, Product, List
 from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer
 
 
@@ -37,6 +36,7 @@ def searchProduct(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         productName = data["name"]
+        productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('name')
         serializer = SearchSerializer(objs, many=True)
@@ -48,9 +48,11 @@ def searchProductCount(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         productName = data["name"]
+        productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('name')
         objscount = objs.count()
+        print(objscount)
         return JsonResponse(objscount, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
@@ -60,3 +62,16 @@ def infoproduct(request):
         serializer = ProductSerializer(datalist, many=True)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
 
+
+def writeList(request):
+    if request.method == 'POST':
+        id = request.session['sessionid']
+        data = JSONParser().parse(request)
+        productName = data["name"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(name__icontains=productName).values('pno')
+        obj = List.objs.get(id=id)
+        obj.pno = objs
+        obj.uno = obj.values('uno')
+        obj.save()

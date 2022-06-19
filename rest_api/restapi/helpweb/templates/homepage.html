@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Help.app</title>
+    <title>마트 관리자</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -49,32 +49,32 @@
             }
         })
     </script>
-    <script>
-        $.ajax({
-        type:"get",
-        url:"/infoproduct",
-        dataType:"json",
-        success:function(data){
-            console.log("테스트통신성공");
-            console.log(data);
-            str='<table>';
-            str+='<tr>'+'<td>'+"&nbsp;&nbsp;&nbsp;&nbsp;상 품 명"+'</td>'+'<td>'+"상품 가격"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'
-            +'<td>'+"상품 위치"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"상품 번호"+'</td>'
-            +'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"소분류"+'</td>'+'<td>'+"&nbsp;&nbsp;&nbsp;"+'</td>'+'<td>'+"대분류"+'</td>'
-            +'</tr>';
-                $.each(data,function(i){
-                    str+='<tr>'+'<td>'+data[i].name+'</td>'+'<td>'+data[i].price+'</td>'+'<td>'+""+'</td>'
-                    +'<td>'+data[i].location+'</td>'+'<td>'+""+'</td>'+'<td>'+data[i].pno+'</td>'
-                    +'<td>'+""+'</td>'+'<td>'+data[i].sub1+'</td>'+'<td>'+""+'</td>'+'<td>'+data[i].main+'</td>'
-                    +'</tr>';
-                });
-            $("#infoproducttarget").append(str);
-            },
-            error:function(){
-                console.log("테스트통신실패");
-            }
-        })
-    </script>
+<!--    <script>-->
+<!--        $.ajax({-->
+<!--        type:"get",-->
+<!--        url:"/infoproduct",-->
+<!--        dataType:"json",-->
+<!--        success:function(data){-->
+<!--            console.log("테스트통신성공");-->
+<!--            console.log(data);-->
+<!--            str='<table class="table table-bordered" width = "100%" cellspacing="0">' + '<thead>';-->
+<!--            str+='<tr>'+'<td>'+"상 품 명"+'</td>'+'<td>'+"상품 가격"+'</td>'-->
+<!--            +'<td>'+"상품 위치"+'</td>'+'<td>'+"상품 번호"+'<td>'+"소분류"+'</td>'+'<td>'+"대분류"+'</td>'-->
+<!--            +'</tr>'+'</thead>' + '<tbody>';-->
+<!--                $.each(data,function(i){-->
+<!--                    str+='<tr>'+'<td>'+data[i].name+'</td>'+'<td>'+data[i].price+'</td>'-->
+<!--                    +'<td>'+data[i].location+'</td>'+'<td>'+data[i].pno+'</td>'-->
+<!--                    +'<td>'+data[i].sub1+'</td>'+'<td>'+data[i].main+'</td>'-->
+<!--                    +'</tr>';-->
+<!--                });-->
+<!--            str+='</tbody>' +'</table>'-->
+<!--            $("#infoproducttarget").append(str);-->
+<!--            },-->
+<!--            error:function(){-->
+<!--                console.log("테스트통신실패");-->
+<!--            }-->
+<!--        })-->
+<!--    </script>-->
 <!--    <script type="text/javascript" src="{% static 'js/charts.js'%}"></script>-->
 </head>
 <style>
@@ -105,7 +105,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="/hompage">
+                <a class="nav-link" href="/homepage">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -120,6 +120,10 @@
                 <a class="nav-link collapsed" href="/logout" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <span>Logout</span>
+                </a>
+                <a class="nav-link collapsed" href="/view" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <span>회원 정보 조회</span>
                 </a>
 
             <!-- Nav Item - Charts -->
@@ -162,7 +166,7 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                    <h2 style="text-align:center;"> 오늘도 행복한 하루되세요</h2>
                 </nav>
                 <!-- End of Topbar -->
 
@@ -181,7 +185,71 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div id="liststarget"></div>
+                                                                <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTables" width="50%">
+                                    <thead>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이메일</th>
+                                            <th>핸드폰</th>
+                                            <th>장애등급</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if name_list %}
+                                        {% for name in name_list %}
+                                            <tr>
+                                                <td>{{name.id}}</td>
+                                                <td>{{name.name}}</td>
+                                                <td>{{name.phone}}</td>
+                                                <td>{{name.gno.grade}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="8">No Data.</td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <ul class="pagination justify-content-center">
+                                    <!-- 이전페이지 -->
+                                    {% if name_list.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ name_list.previous_page_number }}">이전</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                                    </li>
+                                    {% endif %}
+                                    <!-- 페이지리스트 -->
+                                    {% for page_number in name_list.paginator.page_range %}
+                                    {% if page_number >= name_list.number|add:-3 and page_number <= name_list.number|add:3 %}
+                                    {% if page_number == name_list.number %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    <!-- 다음페이지 -->
+                                    {% if name_list.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +278,75 @@
                             <h6 class="m-0 font-weight-bold text-primary">상품 정보</h6>
                         </div>
                         <div class="card-body">
-                            <div id="infoproducttarget"></div>
+<!--                            <div id="infoproducttarget"></div>-->
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>상품 번호</th>
+                                            <th>상품 이름</th>
+                                            <th>상품 가격</th>
+                                            <th>상품 위치</th>
+                                            <th>소분류</th>
+                                            <th>대분류</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if question_list %}
+                                        {% for question in question_list %}
+                                            <tr>
+                                                <td>{{question.pno}}</td>
+                                                <td>{{question.name}}</td>
+                                                <td>{{question.price}}</td>
+                                                <td>{{question.location}}</td>
+                                                <td>{{question.main}}</td>
+                                                <td>{{question.sub1}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="8">No Data.</td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <ul class="pagination justify-content-center">
+                                    <!-- 이전페이지 -->
+                                    {% if question_list.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                                    </li>
+                                    {% endif %}
+                                    <!-- 페이지리스트 -->
+                                    {% for page_number in question_list.paginator.page_range %}
+                                    {% if page_number >= question_list.number|add:-3 and page_number <= question_list.number|add:3 %}
+                                    {% if page_number == question_list.number %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    <!-- 다음페이지 -->
+                                    {% if question_list.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
 <!--                    <div class="card shadow mb-4">-->
@@ -232,18 +368,17 @@
 <!--                        </div>-->
 <!--                    </div>-->
 
-                    <!-- Approach -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">raw code</h6>
-                        </div>
-                        <div class="card-body">
-                            <a href="/lists">사용자 계정</a>
-                            <br>
-                            <a href="/infoproduct">상품 정보</a>
-                        </div>
-                    </div>
-                </div>
+<!--                    &lt;!&ndash; Approach &ndash;&gt;-->
+<!--                    <div class="card shadow mb-4">-->
+<!--                        <div class="card-header py-3">-->
+<!--                            <h6 class="m-0 font-weight-bold text-primary">raw code</h6>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
+<!--                            <a href="/lists">사용자 계정</a>-->
+<!--                            <br>-->
+<!--                            <a href="/infoproduct">상품 정보</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
             </div>
         </div>
                 <!-- /.container-fluid -->
@@ -255,7 +390,7 @@
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>Copyright &copy; Your Website 2022</span>
+                <span>Copyright &copy; 2022 멀티 캠퍼스 3조 프로젝트 </span>
                 <span>Project By <a href="https://github.com/multicampusiot3project">BIAC Team</a> </span>
             </div>
         </div>

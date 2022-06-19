@@ -1,5 +1,9 @@
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django_request_mapping import request_mapping
+
+from android_rest.models import Product, User
 from helpweb.models import *
 from django.views import View
 
@@ -46,10 +50,43 @@ class MyView(View):
     @request_mapping("/homepage", method="get")
     def homepage(self, request):
         try:
-            if request.session['sessionid'] != None:
-                return render(request, 'homepage.html')
+            if request.session['sessionid'] is not None:
+                datalist = Product.objects.distinct().all()
+                page = request.GET.get('page', '1')
+                paginator = Paginator(datalist, 30)
+                page_obj = paginator.get_page(page)
+                datalists = User.objects.distinct().all()
+                pages = request.GET.get('page', '1')
+                paginators = Paginator(datalists, 10)
+                page_objs = paginators.get_page(pages)
+                context = {
+                    'boards': page_obj,
+                    'question_list': page_obj,
+                    'page': page,
+                    'name': page_objs,
+                    'name_list': page_objs,
+                    'name_page': pages}
+                return render(request, 'homepage.html', context)
         except:
-            return render(request, 'login.html')
+            return render(request, "loginfail.html")
+
+    @request_mapping("/search", method="get")
+    def search(self, request):
+        datalist = Product.objects.distinct().all()
+        search = request.GET.get('search','')
+        if search:
+            search_list = datalist.filter(
+                Q(name_icontans=search) |
+                Q(main_icontains=search) |
+                Q(sub1_icontains=search)
+            )
+        page = request.GET.get('page', '1')
+        paginator = Paginator(datalist, 30)
+        page_obj = paginator.get_page(page)
+        context = {'boards': page_obj,
+                   'question_list': page_obj,
+                   'page': page}
+        return render(request, 'homepage.html', context)
 
     @request_mapping("/testpage", method="get")
     def testpage(self, request):
@@ -116,3 +153,18 @@ class MyView(View):
             return redirect('/homepage')
         else:
             return render(request, 'accessfail.html')
+
+    @request_mapping("/tables", method="get")
+    def tables(self, request):
+        try:
+            datalist = Product.objects.distinct().all()
+            page = request.GET.get('page', '1')
+            paginator = Paginator(datalist, 30)
+            page_obj = paginator.get_page(page)
+            context = {'boards': page_obj,
+                       'question_list': page_obj,
+                       'page': page}
+
+            return render(request, 'homepage.html', context)
+        except:
+            return render(request, "loginfail.html")
