@@ -38,7 +38,7 @@ def searchProduct(request):
         productName = data["name"]
         productName = productName.replace(" ", "")
         print(productName)
-        objs = Product.objects.filter(name__icontains=productName).values('name')
+        objs = Product.objects.filter(name__icontains=productName).values('name', 'main', 'nutrition', 'price')
         serializer = SearchSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
@@ -69,9 +69,10 @@ def writeList(request):
         android_id = data["sessionid"]
         productName = data["name"]
         productName = productName.replace(" ", "")
+        android_id = android_id.replace(",","")
         print(productName)
+        print(android_id)
         objs = Product.objects.filter(name__icontains=productName).values('pno')
-        obj = List.objs.get(id=android_id)
-        obj.pno = objs
-        obj.uno = obj.values('uno')
-        obj.save()
+        obj = User.objects.filter(id=android_id).values('uno')
+        List(uno=obj, pno=objs).save()
+
