@@ -65,13 +65,13 @@ def infoproduct(request):
 
 def writeList(request):
     if request.method == 'POST':
-        id = request.session['sessionid']
         data = JSONParser().parse(request)
+        android_id = data["sessionid"]
         productName = data["name"]
         productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('pno')
-        obj = List.objs.get(id=id)
+        obj = List.objs.get(id=android_id)
         obj.pno = objs
         obj.uno = obj.values('uno')
         obj.save()
