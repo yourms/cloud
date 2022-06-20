@@ -75,4 +75,16 @@ def writeList(request):
         objs = Product.objects.filter(name__icontains=productName).values('pno')
         obj = User.objects.filter(id=android_id).values('uno')
         List(uno=obj, pno=objs).save()
+        return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def writeUser(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        android_id = data["id"]
+        password = data["password"]
+        name = data["name"]
+        gno = data["gno"]
+        User(id=android_id, password=password, name=name, gno=gno).save()
+        return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
 
