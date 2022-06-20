@@ -341,7 +341,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">유저 정보 결과</h1>
+                    <h1 class="h3 mb-2 text-gray-800">상품 검색 결과</h1>
                     <p class="mb-4">이곳에서 상품 결과를 확인하실 수 있습니다.</p>
 
                     <!-- DataTales Example -->
@@ -354,20 +354,26 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>아이디</th>
-                                            <th>이름</th>
-                                            <th>핸드폰</th>
-                                            <th>주소</th>
+                                            <th>상품번호</th>
+                                            <th>상품고유번호</th>
+                                            <th>상품이름</th>
+                                            <th>상품가격</th>
+                                            <th>상품위치</th>
+                                            <th>소분류</th>
+                                            <th>대분류</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% if name_list %}
-                                    {% for name in name_list %}
+                                    {% if question_list %}
+                                    {% for question in question_list %}
                                         <tr>
-                                            <td>{{name.id}}</td>
-                                            <td>{{name.name}}</td>
-                                            <td>{{name.phone}}</td>
-                                            <td>{{name.address}}</td>
+                                            <td>{{question.pno}}</td>
+                                            <td>{{question.id}}</td>
+                                            <td>{{question.name}}</td>
+                                            <td>{{question.price}}</td>
+                                            <td>{{question.location}}</td>
+                                            <td>{{question.main}}</td>
+                                            <td>{{question.sub1}}</td>
                                         </tr>
                                     {% endfor %}
                                     {% else %}              <!-- 게시글 쿼리셋이 존재하지 않을 때 -->
@@ -416,7 +422,7 @@
                                     <!-- 다음페이지 -->
                                     {% if question_list.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ name_list.next_page_number }}">다음</a>
+                                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
                                     </li>
                                     {% else %}
                                     <li class="page-item disabled">

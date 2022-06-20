@@ -9,6 +9,16 @@ from django.views import View
 
 # Create your views here.
 
+def search_result(request, search_list):
+    page = request.GET.get('page', '1')
+    paginator = Paginator(search_list, 30)
+    page_obj = paginator.get_page(page)
+    context = {'board': page_obj,
+               'question_list': page_obj,
+               'page': page}
+    return render(request, 'searchpage.html', context)
+
+
 @request_mapping("")
 class MyView(View):
 
@@ -105,25 +115,62 @@ class MyView(View):
             'name_list': page_objs,
             'name_page': pages,
         }
-        return render(request, 'homepage.html', context)
+        return render(request, 'userinfo.html', context)
 
     @request_mapping("/search", method="get")
     def search(self, request):
         datalist = Product.objects.distinct().all()
+        page = request.GET.get('page', '1')
         search = request.GET.get('search', '')
         if search:
-            search_list = datalist.filter(
-                Q(name_icontans=search) |
-                Q(main_icontains=search) |
-                Q(sub1_icontains=search)
+            datalist = datalist.filter(
+                Q(name__icontains=search) |  # 제목 검색
+                Q(main__icontains=search) |  # 내용 검색
+                Q(sub1__icontains=search)
             )
-        page = request.GET.get('page', '1')
-        paginator = Paginator(datalist, 30)
+        paginator = Paginator(datalist, 30)  # 페이지당 10개씩 보여주기
         page_obj = paginator.get_page(page)
-        context = {'boards': page_obj,
-                   'question_list': page_obj,
-                   'page': page}
-        return render(request, 'homepage.html', context)
+        context = {
+            'board': page_obj,
+            'question_list': page_obj,
+            'page': page
+        }
+        return render(request, 'searchpage.html', context)
+        # try:
+        #     if search_type == '이름':
+        #         search_list = datalist.filter(Q(name_icontans=search))
+        #         page = request.GET.get('page', '1')
+        #         paginator = Paginator(search_list, 30)
+        #         page_obj = paginator.get_page(page)
+        #         context = {'board': page_obj,
+        #                    'question_list': page_obj,
+        #                    'page': page}
+        #
+        #         return render(request, 'searchpage.html', context)
+        #
+        #     elif search_type == '대분류':
+        #         search_list = datalist.filter(Q(main_icontans=search))
+        #         page = request.GET.get('page', '1')
+        #         paginator = Paginator(search_list, 30)
+        #         page_obj = paginator.get_page(page)
+        #         context = {'board': page_obj,
+        #                    'question_list': page_obj,
+        #                    'page': page}
+        #
+        #         return render(request, 'searchpage.html', context)
+        #
+        #     elif search_type == '소분류':
+        #         search_list = datalist.filter(Q(sub1_icontans=search))
+        #         page = request.GET.get('page', '1')
+        #         paginator = Paginator(search_list, 30)
+        #         page_obj = paginator.get_page(page)
+        #         context = {'board': page_obj,
+        #                    'question_list': page_obj,
+        #                    'page': page}
+        #
+        #         return render(request, 'searchpage.html', context)
+        # except:
+        #     raise
 
     @request_mapping("/testpage", method="get")
     def testpage(self, request):
