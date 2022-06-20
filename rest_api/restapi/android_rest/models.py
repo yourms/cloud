@@ -47,8 +47,8 @@ class Product(models.Model):
 class List(models.Model):
     lno = models.AutoField(primary_key=True)
     regdate = models.DateTimeField(auto_now=True, null=False)
-    pno = models.ForeignKey('User', models.DO_NOTHING, db_column='uno', blank=False, null=False)
-    uno = models.ForeignKey('Product', models.DO_NOTHING, db_column='pno', blank=False, null=False)
+    pno = models.IntegerField(blank=False)
+    uno = models.IntegerField(blank=False)
 
     class Meta:
         db_table = 'list'
