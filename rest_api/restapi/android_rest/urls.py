@@ -1,5 +1,6 @@
 from django.urls import path,include
-from android_rest.views import lists, loginandroid, goodsAndorid, searchProduct, searchProductCount, infoproduct, writeList, writeUser
+from android_rest.views import lists, loginandroid, goodsAndorid, searchProduct, searchProductCount, infoproduct, \
+    writeList, writeUser, searchPrice, searchManufacture
 from django.contrib import admin
 
 urlpatterns = [
@@ -9,6 +10,8 @@ urlpatterns = [
     path('', include('helpweb.urls')),
     path('goodsandorid', goodsAndorid, name="goodsandroid"),
     path('searchProduct', searchProduct, name="searchProduct"),
+    path('searchprice', searchPrice, name="searchPrice"),
+    path('searchManufacture', searchManufacture, name="searchManufacture"),
     path('searchcount', searchProductCount),
     path('infoproduct', infoproduct, name="infoproduct"),
     path('writeList', writeList, name="writeList"),
