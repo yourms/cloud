@@ -1,7 +1,8 @@
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from android_rest.models import User, Product, List
-from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer
+from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer, PriceSerializer, \
+    ManufactureSerializer
 
 
 def lists(request):
@@ -33,13 +34,37 @@ def goodsAndorid(request):
 
 
 def searchProduct(request):
+    if request.method == 'GET':
+        data = JSONParser().parse(request)
+        productName = data["name"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(name__icontains=productName).values('price')
+        serializer = SearchSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
+
+
+def searchPrice(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         productName = data["name"]
         productName = productName.replace(" ", "")
         print(productName)
-        objs = Product.objects.filter(name__icontains=productName).values('name', 'main', 'nutrition', 'price')
-        serializer = SearchSerializer(objs, many=True)
+        objs = Product.objects.filter(name__icontains=productName).values('price')
+        serializer = PriceSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def searchManufacture(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["name"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(name__icontains=productName).values('manufacture')
+        serializer = ManufactureSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
 
