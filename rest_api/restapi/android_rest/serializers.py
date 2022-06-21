@@ -31,4 +31,4 @@ class PriceSerializer(serializers.ModelSerializer):
 class ManufactureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['price']
+        fields = ['manufacture']

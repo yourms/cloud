@@ -10,7 +10,7 @@ urlpatterns = [
     path('', include('helpweb.urls')),
     path('goodsandorid', goodsAndorid, name="goodsandroid"),
     path('searchProduct', searchProduct, name="searchProduct"),
-    path('searchprice', searchPrice, name="searchPrice"),
+    path('searchprice', searchPrice, name="searchprice"),
     path('searchManufacture', searchManufacture, name="searchManufacture"),
     path('searchcount', searchProductCount),
     path('infoproduct', infoproduct, name="infoproduct"),

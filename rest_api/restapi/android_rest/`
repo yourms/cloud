@@ -48,7 +48,7 @@ def searchProduct(request):
 def searchPrice(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["name"] 
+        productName = data["price"]
         productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('price')
@@ -60,7 +60,7 @@ def searchPrice(request):
 def searchManufacture(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["name"]
+        productName = data["manufacture"]
         productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('manufacture')
