@@ -69,7 +69,7 @@ def writeList(request):
         android_id = data["sessionid"]
         productName = data["name"]
         productName = productName.replace(" ", "")
-        android_id = android_id.replace(",","")
+        android_id = android_id.replace(",", "")
         print(productName)
         print(android_id)
         objs = Product.objects.filter(name__icontains=productName).values('pno')
@@ -84,7 +84,6 @@ def writeUser(request):
         android_id = data["id"]
         password = data["password"]
         name = data["name"]
-        gno = data["gno"]
-        User(id=android_id, password=password, name=name, gno=gno).save()
+        User(id=android_id, password=password, name=name).save()
         return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
 
