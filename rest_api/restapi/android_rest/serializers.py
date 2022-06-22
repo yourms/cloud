@@ -32,3 +32,9 @@ class ManufactureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['manufacture']
+
+
+class ListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['main']
