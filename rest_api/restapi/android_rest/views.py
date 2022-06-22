@@ -153,7 +153,7 @@ def guardList(request):
         data = JSONParser().parse(request)
         list_num = data["lno"]
         print(list_num)
-        objs = Product.objects.select_related('pno').filter(pno=list_num).values('name')
+        objs = Product.objects.select_related('pno').filter(pno=list_num).values('main')
         serializer = SearchSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
@@ -164,7 +164,7 @@ def nextList(request):
         data = JSONParser().parse(request)
         list_num = data["lno"]
         print(list_num)
-        objs = Product.objects.filter(name__icontains=list_num).values('name')
+        objs = Product.objects.filter(name__icontains=list_num).values('main')
         serializer = ListSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
