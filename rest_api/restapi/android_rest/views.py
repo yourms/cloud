@@ -48,7 +48,7 @@ def searchProduct(request):
 def searchPrice(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["name"] 
+        productName = data["name"]
         productName = productName.replace(" ", "")
         print(productName)
         objs = Product.objects.filter(name__icontains=productName).values('price')
@@ -69,6 +69,28 @@ def searchManufacture(request):
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
 
 
+def pictureName(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["id"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(id=productName).values('name')
+        serializer = SearchSerializer(objs, many=True)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+def picturePrice(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["id"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(id=productName).values('price')
+        serializer = PriceSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
 def searchProductCount(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
@@ -80,6 +102,17 @@ def searchProductCount(request):
         print(objscount)
         return JsonResponse(objscount, safe=False, json_dumps_params={'ensure_ascii': False})
 
+
+def pictureManufacture(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["id"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(id=productName).values('manufacture')
+        serializer = ManufactureSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
 
 def infoproduct(request):
     if request.method == 'GET':
@@ -111,4 +144,3 @@ def writeUser(request):
         name = data["name"]
         User(id=android_id, password=password, name=name).save()
         return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
-
