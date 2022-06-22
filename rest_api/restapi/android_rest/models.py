@@ -17,7 +17,7 @@ class User(models.Model):
 
 class Product(models.Model):
     pno = models.IntegerField(primary_key=True)
-    id = models.CharField(max_length=10,blank=False)
+    id = models.CharField(max_length=10, blank=False)
     main = models.CharField(max_length=10, blank=False)
     sub1 = models.CharField(max_length=10, blank=False)
     sub2 = models.CharField(max_length=20, blank=False)
@@ -38,8 +38,8 @@ class Product(models.Model):
 class List(models.Model):
     lno = models.AutoField(primary_key=True)
     regdate = models.DateTimeField(auto_now=True, null=False)
-    pno = models.IntegerField(blank=False)
-    uno = models.IntegerField(blank=False)
+    pno = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='pno')
+    uno = models.ForeignKey(User, on_delete=models.CASCADE, db_column='uno')
 
     class Meta:
         db_table = 'list'

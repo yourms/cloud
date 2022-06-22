@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from android_rest.models import User, Product, List
 from android_rest.serializers import UserSerializer, ProductSerializer, SearchSerializer, PriceSerializer, \
-    ManufactureSerializer
+    ManufactureSerializer, ListSerializer
 
 
 def lists(request):
@@ -79,6 +79,7 @@ def pictureName(request):
         serializer = SearchSerializer(objs, many=True)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
 
+
 def picturePrice(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
@@ -114,6 +115,7 @@ def pictureManufacture(request):
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
 
+
 def infoproduct(request):
     if request.method == 'GET':
         datalist = Product.objects.distinct().all()
@@ -144,3 +146,27 @@ def writeUser(request):
         name = data["name"]
         User(id=android_id, password=password, name=name).save()
         return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def guardList(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["lno"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.select_related('pno').filter(pno=productName).values('name')
+        serializer = SearchSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def nextList(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        productName = data["lno"]
+        productName = productName.replace(" ", "")
+        print(productName)
+        objs = Product.objects.filter(name__icontains=productName).values('name')
+        serializer = ListSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
