@@ -151,10 +151,9 @@ def writeUser(request):
 def guardList(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["lno"]
-        productName = productName.replace(" ", "")
-        print(productName)
-        objs = Product.objects.select_related('pno').filter(pno=productName).values('name')
+        list_num = data["lno"]
+        print(list_num)
+        objs = Product.objects.select_related('pno').filter(pno=list_num).values('name')
         serializer = SearchSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
@@ -163,10 +162,9 @@ def guardList(request):
 def nextList(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        productName = data["lno"]
-        productName = productName.replace(" ", "")
-        print(productName)
-        objs = Product.objects.filter(name__icontains=productName).values('name')
+        list_num = data["lno"]
+        print(list_num)
+        objs = Product.objects.filter(name__icontains=list_num).values('name')
         serializer = ListSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
