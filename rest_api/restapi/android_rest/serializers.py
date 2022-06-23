@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from android_rest.models import User, Product
 
 
