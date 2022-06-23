@@ -86,10 +86,12 @@ def picturePrice(request):
         productName = data["id"]
         productName = productName.replace(" ", "")
         print(productName)
-        objs = Product.objects.filter(id=productName).values('price')
-        serializer = PriceSerializer(objs, many=True)
-        print(serializer.data)
-        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        # objs = Product.objects.filter(id=productName).values('price')
+        objs = Product.objects.raw(
+            "SELECT price FROM product WHERE id = {}".format(productName))[0]
+        # serializer = PriceSerializer(objs, many=True)
+        # print(serializer.data)
+        return JsonResponse(objs.price, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
 def searchProductCount(request):
@@ -134,7 +136,7 @@ def writeList(request):
         print(android_id)
         objs = Product.objects.filter(name__icontains=productName).values('pno')
         obj = User.objects.filter(id=android_id).values('uno')
-        List(uno=obj.uno, pno=objs.pno).save()
+        List(uno=obj, pno=objs).save()
         return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
 
 
@@ -153,10 +155,11 @@ def guardList(request):
         data = JSONParser().parse(request)
         list_num = data["lno"]
         print(list_num)
-        objs = Product.objects.select_related('pno').filter(lno=list_num).values('main')
-        serializer = ListSerializer(objs, many=True)
-        print(serializer.data)
-        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        objs = List.objects.raw(
+            "SELECT * FROM list l LEFT JOIN product p ON l.pno = p.pno WHERE l.lno = {}".format(list_num))[0]
+        print(objs.main)
+        print(objs.main)
+        return JsonResponse(objs.main, safe=False, json_dumps_params={"ensure_ascii": False})
 
 
 def nextList(request):
