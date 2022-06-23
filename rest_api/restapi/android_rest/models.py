@@ -26,7 +26,7 @@ class Product(models.Model):
     name = models.CharField(max_length=30, blank=False)
     quantitiy = models.CharField(max_length=10, blank=False)
     nutrition = models.TextField(blank=False)
-    price = models.DecimalField(max_digits=11, decimal_places=2)
+    price = models.IntegerField(blank=False)
     section = models.CharField(max_length=20, blank=False)
     location = models.CharField(max_length=20, blank=False)
     stock = models.CharField(max_length=20, blank=False)
