@@ -97,7 +97,7 @@
 
 
                     <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/search" method="get">
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/searchuser" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                                 aria-label="Search" aria-describedby="basic-addon2" name="search">
@@ -284,8 +284,8 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">상품 검색 결과</h1>
-                    <p class="mb-4">이곳에서 상품 결과를 확인하실 수 있습니다.</p>
+                    <h1 class="h3 mb-2 text-gray-800">유저 검색 결과</h1>
+                    <p class="mb-4">이곳에서 유저 검색 결과를 확인하실 수 있습니다.</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -293,30 +293,23 @@
                             <h6 class="m-0 font-weight-bold text-primary">Data Tables</h6>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>상품번호</th>
-                                            <th>상품고유번호</th>
-                                            <th>상품이름</th>
-                                            <th>상품가격</th>
-                                            <th>상품위치</th>
-                                            <th>대분류</th>
-                                            <th>소분류</th>
+                                            <th>아이디</th>
+                                            <th>이름</th>
+                                            <th>핸드폰</th>
+                                            <th>주소</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% if question_list %}
-                                    {% for question in question_list %}
+                                    {% if name_list %}
+                                    {% for name in name_list %}
                                         <tr>
-                                            <td>{{question.pno}}</td>
-                                            <td>{{question.id}}</td>
-                                            <td>{{question.name}}</td>
-                                            <td>{{question.price}} 원</td>
-                                            <td>{{question.location}}</td>
-                                            <td>{{question.main}}</td>
-                                            <td>{{question.sub1}}</td>
+                                            <td>{{name.id}}</td>
+                                            <td>{{name.name}}</td>
+                                            <td>{{name.phone}}</td>
+                                            <td>{{name.address}}</td>
                                         </tr>
                                     {% endfor %}
                                     {% else %}              <!-- 게시글 쿼리셋이 존재하지 않을 때 -->
@@ -365,7 +358,7 @@
                                     <!-- 다음페이지 -->
                                     {% if question_list.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+                                        <a class="page-link" href="?page={{ name_list.next_page_number }}">다음</a>
                                     </li>
                                     {% else %}
                                     <li class="page-item disabled">
@@ -405,7 +398,6 @@
         </div>
         <!-- End of Content Wrapper -->
 
-    </div>
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->

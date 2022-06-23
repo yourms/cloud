@@ -125,8 +125,8 @@ class MyView(View):
         if search:
             datalist = datalist.filter(
                 Q(name__icontains=search) |  # 제목 검색
-                Q(main__icontains=search) |  # 내용 검색
-                Q(sub1__icontains=search)
+                Q(main__icontains=search) |  # 대분류 검색
+                Q(sub1__icontains=search)  # 소분류 검색
             )
         paginator = Paginator(datalist, 30)  # 페이지당 10개씩 보여주기
         page_obj = paginator.get_page(page)
@@ -136,41 +136,27 @@ class MyView(View):
             'page': page
         }
         return render(request, 'searchpage.html', context)
-        # try:
-        #     if search_type == '이름':
-        #         search_list = datalist.filter(Q(name_icontans=search))
-        #         page = request.GET.get('page', '1')
-        #         paginator = Paginator(search_list, 30)
-        #         page_obj = paginator.get_page(page)
-        #         context = {'board': page_obj,
-        #                    'question_list': page_obj,
-        #                    'page': page}
-        #
-        #         return render(request, 'searchpage.html', context)
-        #
-        #     elif search_type == '대분류':
-        #         search_list = datalist.filter(Q(main_icontans=search))
-        #         page = request.GET.get('page', '1')
-        #         paginator = Paginator(search_list, 30)
-        #         page_obj = paginator.get_page(page)
-        #         context = {'board': page_obj,
-        #                    'question_list': page_obj,
-        #                    'page': page}
-        #
-        #         return render(request, 'searchpage.html', context)
-        #
-        #     elif search_type == '소분류':
-        #         search_list = datalist.filter(Q(sub1_icontans=search))
-        #         page = request.GET.get('page', '1')
-        #         paginator = Paginator(search_list, 30)
-        #         page_obj = paginator.get_page(page)
-        #         context = {'board': page_obj,
-        #                    'question_list': page_obj,
-        #                    'page': page}
-        #
-        #         return render(request, 'searchpage.html', context)
-        # except:
-        #     raise
+
+    @request_mapping("/searchuser", method="get")
+    def searchUser(self, request):
+        datalist = User.objects.distinct().all()
+        page = request.GET.get('page', '1')
+        search = request.GET.get('search', '')
+        if search:
+            datalist = datalist.filter(
+                Q(name__icontains=search) |  # 이름 검색
+                Q(id__icontains=search) |  # 아이디 검색
+                Q(phone__icontains=search) |  # 핸드폰 검색
+                Q(address__icontains=search)
+            )
+        paginator = Paginator(datalist, 30)  # 페이지당 10개씩 보여주기
+        page_obj = paginator.get_page(page)
+        context = {
+            'name': page_obj,
+            'name_list': page_obj,
+            'name_page': page
+        }
+        return render(request, 'searchuserpage.html', context)
 
     @request_mapping("/testpage", method="get")
     def testpage(self, request):
