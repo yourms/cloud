@@ -9,5 +9,6 @@
 
 ## 아키텍처
 
-![example drawio](https://user-images.githubusercontent.com/73889507/174424326-ba944d56-cde2-4704-9186-68246725e8b2.png)
+![writing](https://user-images.githubusercontent.com/73889507/175432545-b0eb7524-b88a-49c7-8c07-0b5d62e1d9f3.jpg)
+
 
