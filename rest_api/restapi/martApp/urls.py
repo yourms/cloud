@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls    import path, include
-from martApp            import views
+from martApp import views
 print("martApp urls")
 urlpatterns = [
     path('index/',          views.index , name='index'),

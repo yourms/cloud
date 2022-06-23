@@ -1,5 +1,6 @@
 from django.db import models
 
+# Create your models here.
 class MartMap(models.Model):
     row   = models.CharField(max_length=2)
     col  = models.CharField(max_length=2)
@@ -13,3 +14,56 @@ class MartMap(models.Model):
                 name="unique MartMap",
             )
         ]
+# Create your models here.
+class Location(models.Model):
+    loc   = models.CharField(max_length=4, primary_key=True)
+    minx  = models.FloatField()
+    maxx  = models.FloatField()
+    miny = models.FloatField()
+    maxy = models.FloatField()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
