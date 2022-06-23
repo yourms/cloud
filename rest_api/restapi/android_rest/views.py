@@ -134,7 +134,7 @@ def writeList(request):
         print(android_id)
         objs = Product.objects.filter(name__icontains=productName).values('pno')
         obj = User.objects.filter(id=android_id).values('uno')
-        List(uno=obj, pno=objs).save()
+        List(uno=obj.uno, pno=objs.pno).save()
         return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii': False})
 
 
@@ -153,7 +153,7 @@ def guardList(request):
         data = JSONParser().parse(request)
         list_num = data["lno"]
         print(list_num)
-        objs = Product.objects.select_related('pno').filter(pno=list_num).values('main')
+        objs = Product.objects.select_related('pno').filter(lno=list_num).values('main')
         serializer = ListSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
