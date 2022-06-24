@@ -54,7 +54,7 @@ def def_route(now_position, user_id):
                'location': data[4], }
 
         route_list_ori_dataset.append(row)
-    print("route_list_ori_dataset : ", route_list_ori_dataset)
+    # print("route_list_ori_dataset : ", route_list_ori_dataset)
     # connection.commit()
     # connection.close()
     # db 접속 종료
@@ -66,7 +66,7 @@ def def_route(now_position, user_id):
         # print("fields.row : ", i['fields']['row'])
         # junction_list.append(i['fields']['row'] + '_' + i['fields']['col'])
         route_list_ori.append(i['location'])
-    print("route_list_ori : ", route_list_ori)
+    # print("route_list_ori : ", route_list_ori)
     # route_list_ori = ["D_3", "E_8", "I_12"]  # 상품위치 나중에 DB에서 긁어와야함
     route_list_ori_for_sound = route_list_ori.copy()
     # route_list = ["D_3", "E_8", "I_12", "I_2", "J_3", "H_11"]    # 상품위치 나중에 DB에서 긁어와야함
@@ -141,7 +141,6 @@ def def_route(now_position, user_id):
 # 부분 경로 반휜하는 find_junction
 def find_junction(first, second):
 
-    print("first, second : ", first, second)
     #junction = MartMap.objects.filter(junction=1)  # 모델에서 분기점 긁어옴
     # conn = pymysql.connect(host=host, user=user, password=pw, db=db)
     # curs = conn.cursor()
@@ -177,7 +176,7 @@ def find_junction(first, second):
     # print(" junction[1]", junction[1].fields)
 
     junction_list = ['A_1','A_4','A_7','A_10','A_13','F_1','F_4','F_7','F_10','F_13','K_1','K_4','K_7','K_10','K_13']
-    print("junction_list : ", junction_list)
+    # print("junction_list : ", junction_list)
     #first = "G_13"
     f_arr = first.split("_")
     #second = "J_1"
@@ -185,9 +184,9 @@ def find_junction(first, second):
     first_col = []
     second_col = []
     return_col_list = []
-    if (f_arr[0] == s_arr[0]):
+    if (f_arr[0] == s_arr[0] and (f_arr[0] in ['A', 'F', 'K'])):
         return_col_list = [[first, second]]
-    elif (f_arr[1] == s_arr[1]):
+    elif (f_arr[1] == s_arr[1] and (f_arr[1] in ['1','4','7','10','13'])):
         return_col_list = [[first, second]]
 
     else:
@@ -279,7 +278,6 @@ def middle_route(first_position, second_position):
             return_list = list(map(chr, range(ord(f_arr[0]), ord(s_arr[0]) - 1, -1) ))
 
         elif ( f_arr[0] < s_arr[0] ):
-
             return_list = list(map(chr, range(ord(f_arr[0]), ord(s_arr[0]) + 1, 1) ))
         #print(return_list)
         return_list = [ col + '_' +f_arr[1] for col in return_list]
@@ -354,15 +352,18 @@ def guide_mart(route_arr, route_for_sound, route_list_ori_for_sound):
                             sound_lists = find_product(route_str[idx + 1], rsl, sound_lists, lists_arr)
                             route_list_ori_for_sound.remove(rsl)
     return sound_lists
+def test_maker():
+    print("test_maker !!!")
 
+def path_maker(user_id, now_position):
+    if(user_id == ""):
+        user_id = "안녕"
 
-def path_maker():
-    user_id = "안녕"
     conn = pymysql.connect(host=host, user=user, password=pw, db=db)
     curs = conn.cursor()
 
 
-    now_position = def_now_position()
+    # now_position = def_now_position()
     s_route_list, s_route_list_one_row, route_list_copy, route_list_ori, sound_lists = def_route(now_position, user_id)
 
     sql_select = "select l_grp from list where uno = (select uno from user where id = (%s))"
@@ -386,7 +387,7 @@ def path_maker():
         main_no = row[0]
     path_list_insert = []
     for index, routes in enumerate(s_route_list):
-        print(type(routes))
+        # print(type(routes))
         routes_str = ','.join(routes)
         path_list_insert.append([main_no,index+1,user_id,routes_str])
 
@@ -409,7 +410,7 @@ def path_maker():
     # db 접속 종료
     curs.close()
     conn.close()
-path_maker()
+path_maker("")
 
 
 

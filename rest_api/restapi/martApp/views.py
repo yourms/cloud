@@ -34,7 +34,9 @@ def updateMap(request):
     martmap = MartMap.objects.all().order_by('row','col')  # MartMap 에서 데이터 긁어옴(테이블 세팅 하기위해)
     martmap = serializers.serialize('json', list(martmap))
     now_position = def_now_position()                      # 나중에 DB에서 긁어올것임
-    route, s_route_list_one_row, route_list, route_list_ori, sound_lists = def_route(now_position)            # 경로, 거처야할곳(상품 옆)
+    user_id = "안녕"
+
+    route, s_route_list_one_row, route_list, route_list_ori, sound_lists = def_route(now_position, user_id)            # 경로, 거처야할곳(상품 옆)
 
     camera_url = ['test94','test18','test17']
     camera_url.reverse()
@@ -53,9 +55,6 @@ def updateMap(request):
     else:
         return render(request, 'index.html', context)
 
-def def_now_position():
-    now_position = "K_1"
-    return now_position
 '''
 def mysql_query(query):  # 안씀.....
     try:
@@ -83,6 +82,10 @@ pw = "group3" #접속할 db의 password
 db = "group3_db" #접속할 db의 table명 (실제 데이터가 추출되는 table)
 
 
+def def_now_position():
+    now_position = "K_1"
+    return now_position
+
 def rout_list_set(route_list):
     route_list2 = []
     for route in route_list:
@@ -97,7 +100,7 @@ def rout_list_set(route_list):
     return route_list2
 
 
-def def_route(now_position):
+def def_route(now_position, user_id):
     print(">>>>  def_route")
 
     conn = pymysql.connect(host=host, user=user, password=pw, db=db)
@@ -107,8 +110,8 @@ def def_route(now_position):
     strSql += " from user u"
     strSql += " left join list l on u.uno = l.uno"
     strSql += " left join product p on p.pno = l.pno"
-    strSql += " where u.uno = 4"
-    curs.execute(strSql)
+    strSql += " where u.id = (%s)"
+    curs.execute(strSql,(user_id))
     datas = curs.fetchall()
     route_list_ori_dataset = []
     for data in datas:
@@ -119,7 +122,7 @@ def def_route(now_position):
                'location': data[4], }
 
         route_list_ori_dataset.append(row)
-
+    # print("route_list_ori_dataset : ", route_list_ori_dataset)
     # connection.commit()
     # connection.close()
     # db 접속 종료
@@ -131,6 +134,7 @@ def def_route(now_position):
         # print("fields.row : ", i['fields']['row'])
         # junction_list.append(i['fields']['row'] + '_' + i['fields']['col'])
         route_list_ori.append(i['location'])
+    # print("route_list_ori : ", route_list_ori)
     # route_list_ori = ["D_3", "E_8", "I_12"]  # 상품위치 나중에 DB에서 긁어와야함
     route_list_ori_for_sound = route_list_ori.copy()
     # route_list = ["D_3", "E_8", "I_12", "I_2", "J_3", "H_11"]    # 상품위치 나중에 DB에서 긁어와야함
@@ -205,42 +209,42 @@ def def_route(now_position):
 # 부분 경로 반휜하는 find_junction
 def find_junction(first, second):
 
-    #print("first, second : ", first, second)
     #junction = MartMap.objects.filter(junction=1)  # 모델에서 분기점 긁어옴
-    conn = pymysql.connect(host=host, user=user, password=pw, db=db)
-    curs = conn.cursor()
-
-    strSql = "SELECT row, col, type, junction FROM MartMap WHERE junction = 1"
-    curs.execute(strSql)
-    datas = curs.fetchall()
-    junction = []
-    for data in datas:
-        row = {'row': data[0],
-               'col': data[1],
-               'type': data[2],
-               'junction': data[3],}
-
-        junction.append(row)
-
-    #connection.commit()
-    #connection.close()
-    # db 접속 종료
-    curs.close()
-    conn.close()
+    # conn = pymysql.connect(host=host, user=user, password=pw, db=db)
+    # curs = conn.cursor()
+    #
+    # strSql = "SELECT row, col, type, junction FROM MartMap WHERE junction = 1"
+    # curs.execute(strSql)
+    # datas = curs.fetchall()
+    # junction = []
+    # for data in datas:
+    #     row = {'row': data[0],
+    #            'col': data[1],
+    #            'type': data[2],
+    #            'junction': data[3],}
+    #
+    #     junction.append(row)
+    #
+    # #connection.commit()
+    # #connection.close()
+    # # db 접속 종료
+    # curs.close()
+    # conn.close()
     #print(junction)
     #junction = serializers.serialize('json', list(junction))
     #junction = json.loads(junction)
     junction_list = []
-    for i in junction:
-        # print("fields : ", i['fields'])
-        # print("fields.row : ", i['fields']['row'])
-        #junction_list.append(i['fields']['row'] + '_' + i['fields']['col'])
-        junction_list.append(i['row'] + '_' + i['col'])
+    # for i in junction:
+    #     # print("fields : ", i['fields'])
+    #     # print("fields.row : ", i['fields']['row'])
+    #     #junction_list.append(i['fields']['row'] + '_' + i['fields']['col'])
+    #     junction_list.append(i['row'] + '_' + i['col'])
 
 
     # print(" junction[1]", junction[1].fields)
-    #print("junction_list : ", junction_list)
-    #junction_list = ['A_1','A_4','A_7','A_10','A_13','F_1','F_4','F_7','F_10','F_13','K_1','K_4','K_7','K_10','K_13']
+
+    junction_list = ['A_1','A_4','A_7','A_10','A_13','F_1','F_4','F_7','F_10','F_13','K_1','K_4','K_7','K_10','K_13']
+    # print("junction_list : ", junction_list)
     #first = "G_13"
     f_arr = first.split("_")
     #second = "J_1"
@@ -248,9 +252,9 @@ def find_junction(first, second):
     first_col = []
     second_col = []
     return_col_list = []
-    if (f_arr[0] == s_arr[0]):
+    if (f_arr[0] == s_arr[0] and (f_arr[0] in ['A', 'F', 'K'])):
         return_col_list = [[first, second]]
-    elif (f_arr[1] == s_arr[1]):
+    elif (f_arr[1] == s_arr[1] and (f_arr[1] in ['1','4','7','10','13'])):
         return_col_list = [[first, second]]
 
     else:
@@ -342,7 +346,6 @@ def middle_route(first_position, second_position):
             return_list = list(map(chr, range(ord(f_arr[0]), ord(s_arr[0]) - 1, -1) ))
 
         elif ( f_arr[0] < s_arr[0] ):
-
             return_list = list(map(chr, range(ord(f_arr[0]), ord(s_arr[0]) + 1, 1) ))
         #print(return_list)
         return_list = [ col + '_' +f_arr[1] for col in return_list]
@@ -417,11 +420,6 @@ def guide_mart(route_arr, route_for_sound, route_list_ori_for_sound):
                             sound_lists = find_product(route_str[idx + 1], rsl, sound_lists, lists_arr)
                             route_list_ori_for_sound.remove(rsl)
     return sound_lists
-
-
-#def_route("K_1")
-
-
 
 
 

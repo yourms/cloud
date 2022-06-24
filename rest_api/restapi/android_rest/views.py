@@ -171,3 +171,17 @@ def nextList(request):
         serializer = ListSerializer(objs, many=True)
         print(serializer.data)
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
+
+import sys
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+from martApp.path_maker import path_maker
+
+def nextList(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data["user_id"]
+        now_position = data["now_position"]
+        path_maker(user_id, now_position)
+        return JsonResponse("ok", safe=False, json_dumps_params={'ensure_ascii':False})
