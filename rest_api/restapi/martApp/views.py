@@ -37,9 +37,12 @@ def updateMap(request):
     user_id = "안녕"
 
     route, s_route_list_one_row, route_list, route_list_ori, sound_lists = def_route(now_position, user_id)            # 경로, 거처야할곳(상품 옆)
-
-    camera_url = ['test94','test18','test17']
-    camera_url.reverse()
+    #camera_list = os.listdir("../\static\images\trainimage\")
+    camera_list = os.listdir("./martApp/static/images/trainimage/")
+    camera_list = [filename.split(".")[0] for filename in camera_list]
+    camera_list.sort(reverse=True)
+    print("camera_list : ", camera_list)
+    camera_url = camera_list
     # camera_url = ['https://cdn.top-rider.com/news/photo/202109/61445_132600_2439.jpg']
     context = {
         'map': martmap,                 # row, col 등

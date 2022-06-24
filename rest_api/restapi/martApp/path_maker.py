@@ -410,7 +410,7 @@ def path_maker(user_id, now_position):
     # db 접속 종료
     curs.close()
     conn.close()
-path_maker("")
+# path_maker("")
 
 
 
