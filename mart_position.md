@@ -6,7 +6,7 @@
 - 한칸씩, 한칸만 으로 예상 경로 표시
 
 
-## 아키텍처
+## 동영상
 
 [![Video Label](https://i9.ytimg.com/vi/HMvhI344gSo/mq2.jpg?sqp=CJi91ZUG&rs=AOn4CLBnoBHmxPY2Ft4LSK-Vkd53v1uiKw)](https://youtu.be/HMvhI344gSo)
 
