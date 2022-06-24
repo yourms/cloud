@@ -180,3 +180,12 @@ def delList(request):
         objs.delete()
         okay = "okay"
         return JsonResponse(okay, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def updatePrimaryCount(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        list_num = data["lno"]
+        print(list_num)
+        objs = List.objects.raw("ALTER TABLE list AUTO_INCREMENT=1;")
+        return JsonResponse(objs.main, safe=False, json_dumps_params={"ensure_ascii": False})
