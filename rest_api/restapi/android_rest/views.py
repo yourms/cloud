@@ -178,7 +178,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 from martApp.path_maker import path_maker
 
-def nextList(request):
+def path_maker(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         user_id = data["user_id"]
