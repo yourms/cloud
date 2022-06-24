@@ -86,12 +86,10 @@ def picturePrice(request):
         productName = data["id"]
         productName = productName.replace(" ", "")
         print(productName)
-        # objs = Product.objects.filter(id=productName).values('price')
-        objs = Product.objects.raw(
-            "SELECT price FROM product WHERE id = {}".format(productName))[0]
-        # serializer = PriceSerializer(objs, many=True)
-        # print(serializer.data)
-        return JsonResponse(objs.price, safe=False, json_dumps_params={'ensure_ascii': False})
+        objs = Product.objects.filter(id=productName).values('price')
+        serializer = PriceSerializer(objs, many=True)
+        print(serializer.data)
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
 def searchProductCount(request):
@@ -170,4 +168,15 @@ def nextList(request):
         objs = Product.objects.filter(name__icontains=list_num).values('main')
         serializer = ListSerializer(objs, many=True)
         print(serializer.data)
-        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii':False})
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def delList(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        list_num = data["lno"]
+        print(list_num)
+        objs = List.objs.all()
+        objs.delete()
+        okay = "okay"
+        return JsonResponse(okay, safe=False, json_dumps_params={'ensure_ascii': False})
