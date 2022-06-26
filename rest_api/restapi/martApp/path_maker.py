@@ -32,7 +32,7 @@ def rout_list_set(route_list):
     return route_list2
 
 
-def def_route(now_position, user_id):
+def def_route(now_position, user_id, list_num):
     print(">>>>  def_route")
 
     conn = pymysql.connect(host=host, user=user, password=pw, db=db)
@@ -43,7 +43,8 @@ def def_route(now_position, user_id):
     strSql += " left join list l on u.uno = l.uno"
     strSql += " left join product p on p.pno = l.pno"
     strSql += " where u.id = (%s)"
-    curs.execute(strSql,(user_id))
+    strSql += " and l.l_grp = (%s)"
+    curs.execute(strSql,(user_id, list_num))
     datas = curs.fetchall()
     route_list_ori_dataset = []
     for data in datas:
@@ -354,17 +355,16 @@ def guide_mart(route_arr, route_for_sound, route_list_ori_for_sound):
     return sound_lists
 def test_maker():
     print("test_maker !!!")
-
+import time
 def path_maker(user_id, now_position):
+    import time
+    start = time.time()  # 시작 시간 저장
+
     if(user_id == ""):
         user_id = "안녕"
 
     conn = pymysql.connect(host=host, user=user, password=pw, db=db)
     curs = conn.cursor()
-
-
-    # now_position = def_now_position()
-    s_route_list, s_route_list_one_row, route_list_copy, route_list_ori, sound_lists = def_route(now_position, user_id)
 
     sql_select = "select l_grp from list where uno = (select uno from user where id = (%s))"
     curs.execute(sql_select, (user_id))
@@ -372,6 +372,12 @@ def path_maker(user_id, now_position):
     for row in curs.fetchall():
         list_num = row[0]
     print("list_num : ", list_num)
+
+
+    # now_position = def_now_position()
+    s_route_list, s_route_list_one_row, route_list_copy, route_list_ori, sound_lists = def_route(now_position, user_id, list_num)
+
+
 
     print("user_id : ", user_id)
     # path_mainSql = "insert into path_main(user_id, list_num)"
@@ -410,7 +416,8 @@ def path_maker(user_id, now_position):
     # db 접속 종료
     curs.close()
     conn.close()
-# path_maker("")
+    print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간
+#path_maker("안녕", "K_1")
 
 
 
